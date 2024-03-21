@@ -9,19 +9,19 @@ import jakarta.persistence.Id;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer patientId;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String address;
     private String phoneNumber;
     private String email;
 
-    public Integer getPatientId() {
-        return patientId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {
