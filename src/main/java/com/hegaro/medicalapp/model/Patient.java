@@ -11,9 +11,11 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Size(max = 100, message = "El nombre(s) debe tener máximo 100 caracteres.")
     @Size(min = 3, message = "El nombre(s) debe tener mínimo 3 caracteres.")
     @Column(nullable = false, length = 100)
     private String firstName;
+    @Size(max = 100, message = "El apellido(s) debe tener máximo 100 caracteres.")
     @Size(min = 3, message = "El apellido(s) debe tener mínimo 3 caracteres.")
     @Column(nullable = false, length = 100)
     private String lastName;
@@ -21,8 +23,8 @@ public class Patient {
     @Size(min = 2, message = "El número de documento de identidad debe tener mínimo 2 digitos.")
     @Column(nullable = false, length = 10)
     private String  documentNumber;
-    @Size(min = 10, message = "La dirección debe tener mínimo 10 caracteres")
     @Size(max = 300, message = "La dirección debe tener máximo 300 caracteres")
+    @Size(min = 10, message = "La dirección debe tener mínimo 10 caracteres")
     @Column(nullable = true, length = 300)
     private String address;
     @Size(min=10, max = 10, message = "El número de dispositivo móvil debe tener 10 digitos.")
