@@ -1,12 +1,16 @@
 package com.hegaro.medicalapp.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.Date;
 import java.util.List;
 
 public class ExceptionResponse {
     private Date timestamp;
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> details;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String url;
 
     public ExceptionResponse(Date timestamp, String message, List<String> details) {
