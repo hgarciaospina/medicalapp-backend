@@ -1,5 +1,6 @@
 package com.hegaro.medicalapp.controller;
 
+import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Patient;
 import com.hegaro.medicalapp.service.PatientService;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,9 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<Patient> findById(@PathVariable("id") Integer id){
         var patient = patientService.findById(id);
+        if(patient == null){
+            throw new ModelNotFoundException("No se encuentra un paciente con ID : " + id);
+        }
         return new ResponseEntity<>(patient, HttpStatus.OK);
     }
     @PostMapping
@@ -53,7 +57,11 @@ public class PatientController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Patient> delete(@PathVariable("id") Integer id){
+        var patient = patientService.findById(id);
+        if(patient == null){
+            throw new ModelNotFoundException("No se encuentra un paciente con ID : " + id);
+        }
         patientService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(patient, HttpStatus.OK);
     }
 }
