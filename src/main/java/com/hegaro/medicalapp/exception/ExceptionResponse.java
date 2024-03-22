@@ -7,7 +7,7 @@ public class ExceptionResponse {
     private Date timestamp;
     private String message;
     private List<String> details;
-    private String detail;
+    private String url;
 
     public ExceptionResponse(Date timestamp, String message, List<String> details) {
         this.timestamp = timestamp;
@@ -15,10 +15,10 @@ public class ExceptionResponse {
         this.details = details;
     }
 
-    public ExceptionResponse(Date timestamp, String message, String detail) {
+    public ExceptionResponse(Date timestamp, String message, String url) {
         this.timestamp = timestamp;
         this.message = message;
-        this.detail = detail;
+        this.url = url;
     }
 
     public Date getTimestamp() {
@@ -45,11 +45,11 @@ public class ExceptionResponse {
         this.details = details;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getUrl() {
+        return url;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
