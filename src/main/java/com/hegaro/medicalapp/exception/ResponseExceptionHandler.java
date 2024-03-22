@@ -12,6 +12,13 @@ import java.util.Date;
 @ControllerAdvice
 @RestController
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<ExceptionResponse> modelExceptionHandler
+            (Exception ex, WebRequest request){
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     @ExceptionHandler(ModelNotFoundException.class)
     public final ResponseEntity<ExceptionResponse> modelExceptionHandler
             (ModelNotFoundException ex, WebRequest request){
