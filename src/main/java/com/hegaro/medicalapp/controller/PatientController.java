@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 @RestController
 @RequestMapping("/patients")
@@ -29,11 +30,11 @@ public class PatientController {
         return patientService.findById(id);
     }
     @PostMapping
-    public void register(@RequestBody Patient patient){
+    public void register(@Valid @RequestBody Patient patient){
         patientService.register(patient);
     }
     @PutMapping
-    public void update(@RequestBody Patient patient){
+    public void update(@Valid @RequestBody Patient patient){
         patientService.update(patient);
     }
     @DeleteMapping("/{id}")
