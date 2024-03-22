@@ -2,7 +2,6 @@ package com.hegaro.medicalapp.model;
 
 import jakarta.persistence.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
@@ -25,7 +24,7 @@ public class Patient {
     private String  documentNumber;
     @Size(max = 300, message = "La dirección debe tener máximo 300 caracteres")
     @Size(min = 10, message = "La dirección debe tener mínimo 10 caracteres")
-    @Column(nullable = true, length = 300)
+    @Column(nullable = false, length = 300)
     private String address;
     @Size(min=10, max = 10, message = "El número de dispositivo móvil debe tener 10 digitos.")
     @Column(nullable = false, length = 10)
@@ -59,13 +58,9 @@ public class Patient {
         this.lastName = lastName;
     }
 
-    public String getDocumentNumber() {
-        return documentNumber;
-    }
+    public String getDocumentNumber() { return documentNumber; }
 
-    public void setDocumentNumber(String documentNumber) {
-        this.documentNumber = documentNumber;
-    }
+    public void setDocumentNumber(String documentNumber) { this.documentNumber = documentNumber; }
 
     public String getAddress() {
         return address;

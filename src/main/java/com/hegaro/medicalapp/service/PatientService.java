@@ -5,7 +5,7 @@ import com.hegaro.medicalapp.model.Patient;
 import java.util.List;
 
 public interface PatientService {
-    void register(Patient patient);
+    Patient register(Patient patient);
     void update(Patient patient);
     List<Patient> findAll();
     Patient findById(Integer id);
