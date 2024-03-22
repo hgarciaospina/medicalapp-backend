@@ -52,7 +52,7 @@ public class PatientController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Patient>ydelete(@PathVariable("id") Integer id){
+    public ResponseEntity<Patient> delete(@PathVariable("id") Integer id){
         patientService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
