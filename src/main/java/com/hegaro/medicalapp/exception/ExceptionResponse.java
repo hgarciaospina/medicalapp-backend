@@ -1,16 +1,24 @@
 package com.hegaro.medicalapp.exception;
 
 import java.util.Date;
+import java.util.List;
 
 public class ExceptionResponse {
     private Date timestamp;
     private String message;
-    private String details;
+    private List<String> details;
+    private String detail;
 
-    public ExceptionResponse(Date timestamp, String message, String details) {
+    public ExceptionResponse(Date timestamp, String message, List<String> details) {
         this.timestamp = timestamp;
         this.message = message;
         this.details = details;
+    }
+
+    public ExceptionResponse(Date timestamp, String message, String detail) {
+        this.timestamp = timestamp;
+        this.message = message;
+        this.detail = detail;
     }
 
     public Date getTimestamp() {
@@ -29,11 +37,19 @@ public class ExceptionResponse {
         this.message = message;
     }
 
-    public String getDetails() {
+    public List<String> getDetails() {
         return details;
     }
 
-    public void setDetails(String details) {
+    public void setDetails(List<String> details) {
         this.details = details;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

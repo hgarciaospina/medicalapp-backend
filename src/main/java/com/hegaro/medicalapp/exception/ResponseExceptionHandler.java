@@ -29,10 +29,9 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
                 .forEach(errorsMessage::add);
 
         ExceptionResponse exceptionResponse =
-                new ExceptionResponse(new Date(), "Validación fállida.", errorsMessage.toString());
+                new ExceptionResponse(new Date(), "Validación fállida.", errorsMessage);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
-
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> modelExceptionHandler
             (Exception ex, WebRequest request){
@@ -47,4 +46,5 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
                 new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
                 return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
+
 }
