@@ -19,6 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/patients")
 public class PatientController {
@@ -56,6 +58,10 @@ public class PatientController {
     }
     @PutMapping
     public ResponseEntity<Patient> update(@Valid @RequestBody Patient patient){
+        var documentNumberFoundChecker = patientService.findByDocumentNumber(patient.getDocumentNumber());
+        if((documentNumberFoundChecker!=null) && (!Objects.equals(documentNumberFoundChecker.getId(), patient.getId()))){
+            throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + patient.getDocumentNumber());
+        }
         patientService.update(patient);
         return new ResponseEntity<>(HttpStatus.OK);
     }
