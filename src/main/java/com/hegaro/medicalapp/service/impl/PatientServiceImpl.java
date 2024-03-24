@@ -41,4 +41,9 @@ public class PatientServiceImpl implements PatientService {
     public void delete(Integer id) {
         patientRepository.deleteById(id);
     }
+
+    @Override
+    public Patient findByDocumentNumber(String documentNumber) {
+        return patientRepository.findByDocumentNumber(documentNumber);
+    }
 }

@@ -1,5 +1,6 @@
 package com.hegaro.medicalapp.controller;
 
+import com.hegaro.medicalapp.exception.DuplicateDataException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Patient;
 import com.hegaro.medicalapp.service.PatientService;
@@ -41,6 +42,10 @@ public class PatientController {
     }
     @PostMapping
     public ResponseEntity<Patient> register(@Valid @RequestBody Patient patient){
+        var documentNumberFoundChecker = patientService.findByDocumentNumber(patient.getDocumentNumber());
+        if(documentNumberFoundChecker != null){
+            throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + patient.getDocumentNumber());
+        }
         var patientCreated = patientService.register(patient);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
