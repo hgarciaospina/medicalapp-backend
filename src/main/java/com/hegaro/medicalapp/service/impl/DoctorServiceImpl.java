@@ -41,4 +41,8 @@ public class DoctorServiceImpl implements DoctorService {
     public void delete(Integer id) {
         doctorRepository.deleteById(id);
     }
+
+    public Doctor findByProfessionalCard(String professionalCard) {
+        return doctorRepository.findByProfessionalCard(professionalCard);
+    }
 }

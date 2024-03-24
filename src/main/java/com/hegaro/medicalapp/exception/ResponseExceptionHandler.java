@@ -27,7 +27,6 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         errors.stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .forEach(errorsMessage::add);
-
         ExceptionResponse exceptionResponse =
                 new ExceptionResponse(new Date(), "Validación fállida.", errorsMessage);
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
@@ -47,4 +46,11 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
                 return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(DuplicateDataException.class)
+    public final ResponseEntity<ExceptionResponse> duplicateDataExceptionHandler
+            (DuplicateDataException ex, WebRequest request){
+        ExceptionResponse exceptionResponse =
+                new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FOUND);
+    }
 }

@@ -1,5 +1,6 @@
 package com.hegaro.medicalapp.controller;
 
+import com.hegaro.medicalapp.exception.DuplicateDataException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Doctor;
 import com.hegaro.medicalapp.service.DoctorService;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/doctors")
@@ -35,6 +37,10 @@ public class DoctorController {
     }
     @PostMapping
     public ResponseEntity<Doctor> register(@Valid @RequestBody Doctor doctor){
+        var professionalCardFoundChecker = doctorService.findByProfessionalCard(doctor.getProfessionalCard());
+        if(professionalCardFoundChecker != null){
+            throw new DuplicateDataException("Ya se encuentra un médico  registrado con la tarjeta profesional : " + doctor.getProfessionalCard());
+        }
         var doctorCreated = doctorService.register(doctor);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -45,6 +51,10 @@ public class DoctorController {
     }
     @PutMapping
     public ResponseEntity<Doctor> update(@Valid @RequestBody Doctor doctor){
+        var professionalCardFoundChecker = doctorService.findByProfessionalCard(doctor.getProfessionalCard());
+        if((professionalCardFoundChecker!=null) && (!Objects.equals(professionalCardFoundChecker.getId(), doctor.getId()))){
+            throw new DuplicateDataException("Ya se encuentra un médico  registrado con la tarjeta profesional : " + doctor.getProfessionalCard());
+        }
         doctorService.update(doctor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
