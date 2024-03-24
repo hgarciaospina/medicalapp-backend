@@ -2,6 +2,9 @@ package com.hegaro.medicalapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -9,12 +12,18 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Size(max = 100, message = "El nombre(s) debe tener máximo 100 caracteres.")
-    @Size(min = 3, message = "El nombre(s) debe tener mínimo 3 caracteres.")
+    @NotNull(message = "Debe ingresar el nombre(s) del paciente.")
+    @NotEmpty(message = "El nombre(s) del paciente no debe(n) estar vacío(s).")
+    @NotBlank(message = "El nombre(s) del paciente no debe ir en blanco")
+    @Size(max = 100, message = "El nombre(s) del paciente debe tener máximo 100 caracteres.")
+    @Size(min = 3, message = "El nombre(s) del paciente debe tener mínimo 3 caracteres.")
     @Column(nullable = false, length = 100)
     private String firstName;
-    @Size(max = 100, message = "El apellido(s) debe tener máximo 100 caracteres.")
-    @Size(min = 3, message = "El apellido(s) debe tener mínimo 3 caracteres.")
+    @NotNull(message = "Debe ingresar el apellido(s) del paciente.")
+    @NotEmpty(message = "El apellido(s) del paciente no debe(n) estar vacío(s).")
+    @NotBlank(message = "El apellido(s) del paciente no debe ir en blanco")
+    @Size(max = 100, message = "El apellido(s) del páciente debe tener máximo 100 caracteres.")
+    @Size(min = 3, message = "El apellido(s) del páciente debe tener mínimo 3 caracteres.")
     @Column(nullable = false, length = 100)
     private String lastName;
     @Size(max = 10, message = "El número de documento de identidad debe tener máximo 10 digitos.")
