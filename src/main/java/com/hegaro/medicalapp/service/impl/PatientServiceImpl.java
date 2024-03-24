@@ -22,8 +22,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void update(Patient patient) {
-        patientRepository.save(patient);
+    public Patient update(Patient patient) {
+        return patientRepository.save(patient);
     }
 
     @Override
