@@ -1,0 +1,63 @@
+package com.hegaro.medicalapp.model;
+
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+
+@Entity
+public class Consultation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_patient"))
+    private Patient patient;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_doctor"))
+    private Doctor doctor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "specialty_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_specialty"))
+    private Specialty specialty;
+
+    @Column(name = "consultation_date", nullable = false)
+    private LocalDateTime consultationDate;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+    public Specialty getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(Specialty specialty) {
+        this.specialty = specialty;
+    }
+    public LocalDateTime getConsultationDate() {
+        return consultationDate;
+    }
+
+    public void setConsultationDate(LocalDateTime consultationDate) {
+        this.consultationDate = consultationDate;
+    }
+}
