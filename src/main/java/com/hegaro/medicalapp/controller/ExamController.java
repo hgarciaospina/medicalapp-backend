@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Exams")
+@RequestMapping("/exams")
 public class ExamController {
     private final ExamService examService;
     public ExamController(ExamService examService) {
