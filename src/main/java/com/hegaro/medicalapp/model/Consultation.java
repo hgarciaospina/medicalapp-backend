@@ -3,6 +3,7 @@ package com.hegaro.medicalapp.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Consultation {
@@ -22,7 +23,9 @@ public class Consultation {
 
     @Column(name = "consultation_date", nullable = false)
     private LocalDateTime consultationDate;
-
+    @OneToMany(mappedBy = "consultation", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+    CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<DetailConsultation> detailConsultations;
     public Integer getId() {
         return id;
     }
@@ -56,8 +59,14 @@ public class Consultation {
     public LocalDateTime getConsultationDate() {
         return consultationDate;
     }
-
     public void setConsultationDate(LocalDateTime consultationDate) {
         this.consultationDate = consultationDate;
+    }
+
+    public List<DetailConsultation> getDetailConsultations() {
+        return detailConsultations;
+    }
+    public void setDetailConsultations(List<DetailConsultation> detailConsultations) {
+        this.detailConsultations = detailConsultations;
     }
 }
