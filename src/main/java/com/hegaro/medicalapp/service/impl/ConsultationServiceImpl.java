@@ -18,7 +18,8 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     @Override
     public Consultation register(Consultation consultation) {
-       return consultationRepository.save(consultation);
+       consultation.getDetailConsultations().forEach(detail -> detail.setConsultation(consultation));
+        return consultationRepository.save(consultation);
     }
 
     @Override
