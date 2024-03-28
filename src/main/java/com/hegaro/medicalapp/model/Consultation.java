@@ -1,23 +1,23 @@
 package com.hegaro.medicalapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
 public class Consultation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_patient"))
     private Patient patient;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_doctor"))
     private Doctor doctor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "specialty_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_specialty"))
     private Specialty specialty;
 
