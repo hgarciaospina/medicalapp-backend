@@ -33,6 +33,7 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         return specialtyRepository.findById(id)
                 .map(existingSpecialty -> {
                     existingSpecialty.setName(specialtyRequest.getName());
+                    specialtyRepository.save(existingSpecialty);
                     return modelMapper.map(existingSpecialty,SpecialtyResponse.class );
                 })
                 .orElseThrow(() -> new ModelNotFoundException( SPECIALTY_NOT_FOUND_MESSAGE + id));
