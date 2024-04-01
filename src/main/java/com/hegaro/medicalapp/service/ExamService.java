@@ -1,6 +1,14 @@
 package com.hegaro.medicalapp.service;
 
-import com.hegaro.medicalapp.model.Exam;
+import com.hegaro.medicalapp.controller.dto.request.ExamRequest;
+import com.hegaro.medicalapp.controller.dto.response.ExamResponse;
 
-public interface ExamService extends CrudGeneric<Exam> {
+import java.util.List;
+
+public interface ExamService {
+    ExamResponse register(ExamRequest examRequest);
+    ExamResponse update(Long id, ExamRequest examRequest);
+    List<ExamResponse> findAll();
+    ExamResponse findById(Long id);
+    void delete(Long id);
 }
