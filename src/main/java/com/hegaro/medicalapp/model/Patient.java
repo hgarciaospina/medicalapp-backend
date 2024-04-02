@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Size;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @NotNull(message = "Debe ingresar el nombre(s) del paciente.")
     @NotEmpty(message = "El nombre(s) del paciente no debe(n) estar vacío(s).")
     @NotBlank(message = "El nombre(s) del paciente no debe ir en blanco")
@@ -42,11 +42,26 @@ public class Patient {
     @Column(nullable = false, length = 100)
     private String email;
 
-    public Integer getId() {
+    public Patient() {
+    }
+
+    public Patient(Long id, String firstName, String lastName,
+                   String documentNumber, String address,
+                   String phoneNumber, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.documentNumber = documentNumber;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
