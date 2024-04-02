@@ -1,7 +1,6 @@
 package com.hegaro.medicalapp.controller;
 
 import com.hegaro.medicalapp.controller.dto.request.PatientRequest;
-import com.hegaro.medicalapp.controller.dto.response.ExamResponse;
 import com.hegaro.medicalapp.controller.dto.response.PatientResponse;
 import com.hegaro.medicalapp.service.PatientService;
 import jakarta.validation.Valid;
@@ -34,7 +33,7 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<ExamResponse> register(@Valid @RequestBody PatientRequest patientRequest){
+    public ResponseEntity<PatientResponse> register(@Valid @RequestBody PatientRequest patientRequest){
         var patientCreated = patientService.register(patientRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
