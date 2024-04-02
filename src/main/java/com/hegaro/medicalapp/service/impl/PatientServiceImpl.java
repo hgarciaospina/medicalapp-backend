@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -25,8 +26,9 @@ public class PatientServiceImpl implements PatientService {
     }
     @Override
     public PatientResponse register(PatientRequest patientRequest) {
-        Patient documentNumberFoundChecker = patientRepository.findByDocumentNumber(patientRequest.getDocumentNumber());
-        if(documentNumberFoundChecker != null){
+        Optional<Patient> documentNumberAlreadyExists
+                = patientRepository.findByDocumentNumber(patientRequest.getDocumentNumber());
+        if(documentNumberAlreadyExists .isPresent()){
             throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + patientRequest.getDocumentNumber());
         }
         Patient newPatient = patientRepository.save(modelMapper.map(patientRequest, Patient.class));
@@ -35,11 +37,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponse update(Long id, PatientRequest patientRequest) {
-        Patient documentNumberFoundChecker;
-        documentNumberFoundChecker = patientRepository.findByDocumentNumber(patientRequest.getDocumentNumber());
-        if((documentNumberFoundChecker!=null)
+        Optional<Patient>  documentNumberAlreadyExists =
+              patientRepository.findByDocumentNumber(patientRequest.getDocumentNumber());
+        if((documentNumberAlreadyExists .isPresent())
                 &&
-           (!Objects.equals(documentNumberFoundChecker.getId(), id))){
+           (!Objects.equals(documentNumberAlreadyExists.get().getId(), id))){
             throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + patientRequest.getDocumentNumber());
         }
         return patientRepository.findById(id)
@@ -57,10 +59,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient findByDocumentNumber(String documentNumber) {
-        Patient documentNumberFoundChecker;
-                documentNumberFoundChecker = patientRepository.findByDocumentNumber(documentNumber);
-        return documentNumberFoundChecker;
+    public Optional<Patient> findByDocumentNumber(String documentNumber) {
+        return patientRepository.findAll()
+                .stream()
+                .filter(patient -> patient.getDocumentNumber().equals(documentNumber))
+                .findFirst();
     }
     @Override
     public List<PatientResponse> findAll() {
@@ -70,8 +73,8 @@ public class PatientServiceImpl implements PatientService {
                         patient.getId(),
                         patient.getFirstName(),
                         patient.getLastName(),
-                        patient.getAddress(),
                         patient.getDocumentNumber(),
+                        patient.getAddress(),
                         patient.getPhoneNumber(),
                         patient.getEmail()))
                 .toList();
