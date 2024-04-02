@@ -25,26 +25,22 @@ public class PatientServiceImpl implements PatientService {
     }
     @Override
     public PatientResponse register(PatientRequest patientRequest) {
-        var documentNumberFoundChecker = this.findByDocumentNumber(patientRequest.getDocumentNumber());
+        Patient documentNumberFoundChecker = patientRepository.findByDocumentNumber(patientRequest.getDocumentNumber());
         if(documentNumberFoundChecker != null){
             throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + patientRequest.getDocumentNumber());
         }
-        Patient newPatient = new Patient(
-                null,
-                patientRequest.getFirstName(), patientRequest.getLastName(),
-                patientRequest.getDocumentNumber(), patientRequest.getAddress(),
-                patientRequest.getPhoneNumber(), patientRequest.getEmail());
-        newPatient = patientRepository.save(newPatient);
+        Patient newPatient = patientRepository.save(modelMapper.map(patientRequest, Patient.class));
         return modelMapper.map(newPatient, PatientResponse.class);
     }
 
     @Override
     public PatientResponse update(Long id, PatientRequest patientRequest) {
-        var documentNumberFoundChecker = this.findByDocumentNumber(patientRequest.getDocumentNumber());
+        Patient documentNumberFoundChecker;
+        documentNumberFoundChecker = patientRepository.findByDocumentNumber(patientRequest.getDocumentNumber());
         if((documentNumberFoundChecker!=null)
                 &&
            (!Objects.equals(documentNumberFoundChecker.getId(), id))){
-            throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + id);
+            throw new DuplicateDataException("Ya se encuentra un paciente  registrado con el número de documento : " + patientRequest.getDocumentNumber());
         }
         return patientRepository.findById(id)
                 .map(existingPatient -> {
@@ -59,10 +55,11 @@ public class PatientServiceImpl implements PatientService {
                 })
                 .orElseThrow(() -> new ModelNotFoundException(PATIENT_NOT_FOUND_MESSAGE + id));
     }
+
     @Override
-    public PatientResponse findByDocumentNumber(String documentNumber) {
-        PatientResponse  documentNumberFoundChecker;
-        documentNumberFoundChecker = patientRepository.findByDocumentNumber(documentNumber);
+    public Patient findByDocumentNumber(String documentNumber) {
+        Patient documentNumberFoundChecker;
+                documentNumberFoundChecker = patientRepository.findByDocumentNumber(documentNumber);
         return documentNumberFoundChecker;
     }
     @Override
