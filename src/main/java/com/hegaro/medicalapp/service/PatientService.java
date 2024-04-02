@@ -5,9 +5,10 @@ import com.hegaro.medicalapp.controller.dto.response.PatientResponse;
 import com.hegaro.medicalapp.model.Patient;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PatientService {
-    Patient findByDocumentNumber(String documentNumber);
+    Optional<Patient> findByDocumentNumber(String documentNumber);
     PatientResponse register(PatientRequest patientRequest);
     PatientResponse update(Long id, PatientRequest patientRequest);
     List<PatientResponse> findAll();
