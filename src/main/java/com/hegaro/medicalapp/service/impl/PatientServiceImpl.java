@@ -62,7 +62,7 @@ public class PatientServiceImpl implements PatientService {
     public Optional<Patient> findByDocumentNumber(String documentNumber) {
         return patientRepository.findAll()
                 .stream()
-                .filter(patient -> patient.getDocumentNumber().equals(documentNumber))
+                .filter(patient -> documentNumber.equals(patient.getDocumentNumber()))
                 .findFirst();
     }
     @Override
