@@ -1,10 +1,9 @@
 package com.hegaro.medicalapp.controller;
 
-import com.hegaro.medicalapp.controller.dto.request.DoctorRequest;
-import com.hegaro.medicalapp.controller.dto.request.PatientRequest;
-import com.hegaro.medicalapp.controller.dto.response.DoctorResponse;
-import com.hegaro.medicalapp.controller.dto.response.PatientResponse;
 import com.hegaro.medicalapp.service.DoctorService;
+import com.hegaro.medicalapp.service.dto.request.DoctorRequest;
+import com.hegaro.medicalapp.service.dto.response.DoctorResponse;
+import com.hegaro.medicalapp.service.dto.response.PatientResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

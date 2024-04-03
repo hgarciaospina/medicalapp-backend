@@ -1,8 +1,8 @@
 package com.hegaro.medicalapp.service;
 
-import com.hegaro.medicalapp.controller.dto.request.PatientRequest;
-import com.hegaro.medicalapp.controller.dto.response.PatientResponse;
 import com.hegaro.medicalapp.model.Patient;
+import com.hegaro.medicalapp.service.dto.request.PatientRequest;
+import com.hegaro.medicalapp.service.dto.response.PatientResponse;
 
 import java.util.List;
 import java.util.Optional;

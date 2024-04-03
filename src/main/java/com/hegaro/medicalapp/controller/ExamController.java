@@ -1,8 +1,8 @@
 package com.hegaro.medicalapp.controller;
 
-import com.hegaro.medicalapp.controller.dto.request.ExamRequest;
-import com.hegaro.medicalapp.controller.dto.response.ExamResponse;
 import com.hegaro.medicalapp.service.ExamService;
+import com.hegaro.medicalapp.service.dto.request.ExamRequest;
+import com.hegaro.medicalapp.service.dto.response.ExamResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,13 +1,13 @@
 package com.hegaro.medicalapp.service.impl;
 
-import com.hegaro.medicalapp.controller.dto.request.DoctorRequest;
-import com.hegaro.medicalapp.controller.dto.response.DoctorResponse;
 import com.hegaro.medicalapp.exception.BadArgumentException;
 import com.hegaro.medicalapp.exception.DuplicateDataException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Doctor;
 import com.hegaro.medicalapp.repository.DoctorRepository;
 import com.hegaro.medicalapp.service.DoctorService;
+import com.hegaro.medicalapp.service.dto.request.DoctorRequest;
+import com.hegaro.medicalapp.service.dto.response.DoctorResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

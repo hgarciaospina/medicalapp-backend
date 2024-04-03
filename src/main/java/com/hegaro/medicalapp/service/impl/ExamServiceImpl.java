@@ -1,12 +1,12 @@
 package com.hegaro.medicalapp.service.impl;
 
-import com.hegaro.medicalapp.controller.dto.request.ExamRequest;
-import com.hegaro.medicalapp.controller.dto.response.ExamResponse;
 import com.hegaro.medicalapp.exception.BadArgumentException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Exam;
 import com.hegaro.medicalapp.repository.ExamRepository;
 import com.hegaro.medicalapp.service.ExamService;
+import com.hegaro.medicalapp.service.dto.request.ExamRequest;
+import com.hegaro.medicalapp.service.dto.response.ExamResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

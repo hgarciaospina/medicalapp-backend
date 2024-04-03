@@ -1,4 +1,4 @@
-package com.hegaro.medicalapp.controller.dto.response;
+package com.hegaro.medicalapp.service.dto.response;
 
 public class ExamResponse {
     private Long id;

@@ -1,4 +1,4 @@
-package com.hegaro.medicalapp.controller.dto.request;
+package com.hegaro.medicalapp.service.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

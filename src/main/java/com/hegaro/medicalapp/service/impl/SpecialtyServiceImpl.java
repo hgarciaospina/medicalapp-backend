@@ -1,12 +1,12 @@
 package com.hegaro.medicalapp.service.impl;
 
-import com.hegaro.medicalapp.controller.dto.request.SpecialtyRequest;
-import com.hegaro.medicalapp.controller.dto.response.SpecialtyResponse;
 import com.hegaro.medicalapp.exception.BadArgumentException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Specialty;
 import com.hegaro.medicalapp.repository.SpecialtyRepository;
 import com.hegaro.medicalapp.service.SpecialtyService;
+import com.hegaro.medicalapp.service.dto.request.SpecialtyRequest;
+import com.hegaro.medicalapp.service.dto.response.SpecialtyResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
