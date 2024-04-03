@@ -52,6 +52,7 @@ public class DoctorServiceImpl implements DoctorService {
                     existingDoctor.setFirstName(doctorRequest.getFirstName());
                     existingDoctor.setLastName(doctorRequest.getLastName());
                     existingDoctor.setProfessionalCard(doctorRequest.getProfessionalCard());
+                    doctorRepository.save(existingDoctor);
                     return modelMapper.map(existingDoctor, DoctorResponse.class );
                 })
                 .orElseThrow(() -> new ModelNotFoundException(DOCTOR_NOT_FOUND_MESSAGE + id));
