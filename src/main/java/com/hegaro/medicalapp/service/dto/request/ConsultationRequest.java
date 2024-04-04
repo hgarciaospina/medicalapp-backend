@@ -1,10 +1,14 @@
 package com.hegaro.medicalapp.service.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hegaro.medicalapp.model.Consultation;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
 public class ConsultationRequest {
+    @JsonIgnore
+    private Consultation consultation;
     @NotNull(message = "Debe asignar un paciente")
     private Long patientId;
     @NotNull(message = "Debe asignar un doctor")
@@ -18,15 +22,26 @@ public class ConsultationRequest {
 
     public ConsultationRequest() {
     }
-
-    public ConsultationRequest(Long patientId, Long doctorId,
-                               Long specialtyId, LocalDateTime consultationDate,
+    public ConsultationRequest(Consultation consultation,
+                               Long patientId,
+                               Long doctorId,
+                               Long specialtyId,
+                               LocalDateTime consultationDate,
                                List<DetailConsultationsRequest> detailConsultationsRequest) {
+        this.consultation = consultation;
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.specialtyId = specialtyId;
         this.consultationDate = consultationDate;
         this.detailConsultationsRequest = detailConsultationsRequest;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
     }
 
     public Long getPatientId() {

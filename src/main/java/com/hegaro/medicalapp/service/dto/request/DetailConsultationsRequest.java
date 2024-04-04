@@ -1,7 +1,5 @@
 package com.hegaro.medicalapp.service.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hegaro.medicalapp.model.Consultation;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class DetailConsultationsRequest {
-    @JsonIgnore
-    private ConsultationRequest consultationRequest;
     @NotNull(message = "Debe ingresar el diagnóstico.")
     @NotEmpty(message = "El diagnóstico no debe estar vacío.")
     @NotBlank(message = "El diagnóstico no debe ir en blanco.")
@@ -26,18 +22,9 @@ public class DetailConsultationsRequest {
     public DetailConsultationsRequest() {
     }
 
-    public DetailConsultationsRequest(ConsultationRequest consultationRequest, String diagnostic, String treatment) {
-        this.consultationRequest = consultationRequest;
+    public DetailConsultationsRequest(String diagnostic, String treatment) {
         this.diagnostic = diagnostic;
         this.treatment = treatment;
-    }
-
-    public ConsultationRequest getConsultationRequest() {
-        return consultationRequest;
-    }
-
-    public void setConsultationRequest(ConsultationRequest consultationRequest) {
-        this.consultationRequest = consultationRequest;
     }
 
     public String getDiagnostic() {

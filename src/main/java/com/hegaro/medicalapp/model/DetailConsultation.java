@@ -1,7 +1,6 @@
 package com.hegaro.medicalapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hegaro.medicalapp.service.dto.request.ConsultationRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

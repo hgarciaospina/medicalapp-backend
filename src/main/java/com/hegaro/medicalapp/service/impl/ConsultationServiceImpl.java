@@ -1,21 +1,20 @@
 package com.hegaro.medicalapp.service.impl;
 
-import com.hegaro.medicalapp.exception.DuplicateDataException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
-import com.hegaro.medicalapp.model.Consultation;
-import com.hegaro.medicalapp.model.Doctor;
-import com.hegaro.medicalapp.model.Patient;
-import com.hegaro.medicalapp.model.Specialty;
+import com.hegaro.medicalapp.model.*;
 import com.hegaro.medicalapp.repository.ConsultationRepository;
 import com.hegaro.medicalapp.repository.DoctorRepository;
 import com.hegaro.medicalapp.repository.PatientRepository;
 import com.hegaro.medicalapp.repository.SpecialtyRepository;
 import com.hegaro.medicalapp.service.ConsultationService;
 import com.hegaro.medicalapp.service.dto.request.ConsultationRequest;
+import com.hegaro.medicalapp.service.dto.request.DetailConsultationsRequest;
 import com.hegaro.medicalapp.service.dto.response.ConsultationResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,29 +41,42 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
     @Override
     public ConsultationResponse register(ConsultationRequest consultationRequest) {
-        Optional<Patient> patient = patientRepository.findById(consultationRequest.getPatientId());
-        if(patient.isEmpty()){
+        Optional<Patient> optPatient = patientRepository.findById(consultationRequest.getPatientId());
+        if(optPatient.isEmpty()){
             throw new ModelNotFoundException(PATIENT_NOT_FOUND_MESSAGE + consultationRequest.getPatientId());
         }
 
-        Optional<Doctor>  doctor = doctorRepository.findById(consultationRequest.getDoctorId());
-        if(doctor.isEmpty()){
+        Optional<Doctor> optDoctor = doctorRepository.findById(consultationRequest.getDoctorId());
+        if(optDoctor.isEmpty()){
             throw new ModelNotFoundException(DOCTOR_NOT_FOUND_MESSAGE + consultationRequest.getDoctorId());
         }
 
-        Optional<Specialty>  specialty = specialtyRepository.findById(consultationRequest.getSpecialtyId());
-        if(specialty.isEmpty()){
+        Optional<Specialty>  optSpecialty = specialtyRepository.findById(consultationRequest.getSpecialtyId());
+        if(optSpecialty.isEmpty()){
             throw new ModelNotFoundException(SPECIALTY_NOT_FOUND_MESSAGE + consultationRequest.getSpecialtyId());
         }
 
-        if(consultationRequest.getDetailConsultationsRequest().size() == 0 || consultationRequest.getDetailConsultationsRequest().isEmpty()){
+        if(consultationRequest.getDetailConsultationsRequest().isEmpty()){
             throw new ModelNotFoundException("Debe registrar los detalles de la consulta de diagnóstico y tratamiento");
         }
 
-        consultationRequest.getDetailConsultationsRequest().forEach(detail -> detail.setConsultationRequest(consultationRequest));
-        Consultation newConsultation = consultationRepository.save(modelMapper.map(consultationRequest, Consultation.class));
-        return modelMapper.map(newConsultation, ConsultationResponse.class);
+        Consultation newConsultation = new Consultation();
+        newConsultation.setPatient(modelMapper.map(optPatient, Patient.class));
+        newConsultation.setDoctor(modelMapper.map(optDoctor, Doctor.class));
+        newConsultation.setSpecialty(modelMapper.map(optSpecialty, Specialty.class));
+        newConsultation.setConsultationDate(consultationRequest.getConsultationDate());
+        List<DetailConsultation> detailConsultationEntityList = new LinkedList<>();
+        for (DetailConsultationsRequest detailConsultationRequest: consultationRequest.getDetailConsultationsRequest()) {
+            DetailConsultation detailConsultationEntity = new DetailConsultation();
+            detailConsultationEntity.setConsultation(newConsultation);
+            detailConsultationEntity.setDiagnostic(detailConsultationRequest.getDiagnostic());
+            detailConsultationEntity.setTreatment(detailConsultationRequest.getTreatment());
+            detailConsultationEntityList.add(detailConsultationEntity);
+        }
 
+        newConsultation.setDetailConsultations(detailConsultationEntityList);
+        Consultation consultation = consultationRepository.save(newConsultation);
+        return modelMapper.map(consultation, ConsultationResponse.class);
     }
     /*
     @Override
