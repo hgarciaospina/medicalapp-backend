@@ -8,7 +8,7 @@ import java.util.List;
 public class Consultation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id", nullable = false,  foreignKey = @ForeignKey(name = "fk_consultation_patient"))
     private Patient patient;
@@ -25,11 +25,11 @@ public class Consultation {
     @OneToMany(mappedBy = "consultation", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
     CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<DetailConsultation> detailConsultations;
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

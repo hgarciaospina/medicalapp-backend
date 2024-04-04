@@ -3,6 +3,8 @@ package com.hegaro.medicalapp.controller;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.Consultation;
 import com.hegaro.medicalapp.service.ConsultationService;
+import com.hegaro.medicalapp.service.dto.request.ConsultationRequest;
+import com.hegaro.medicalapp.service.dto.response.ConsultationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class ConsultationController {
     public ConsultationController(ConsultationService consultationService) {
         this.consultationService = consultationService;
     }
-
+/*
     @GetMapping
     public ResponseEntity<List<Consultation>> findAll(){
         var consultations = consultationService.findAll();
@@ -39,10 +41,10 @@ public class ConsultationController {
             throw new ModelNotFoundException("No se encuentra una consulta con ID : " + id);
         }
         return new ResponseEntity<>(consultation, HttpStatus.OK);
-    }
+    } */
     @PostMapping
-    public ResponseEntity<Consultation> register(@Valid @RequestBody Consultation consultation){
-        var consultationCreated = consultationService.register(consultation);
+    public ResponseEntity<ConsultationResponse> register(@Valid @RequestBody ConsultationRequest consultationRequest){
+        var consultationCreated = consultationService.register(consultationRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -50,6 +52,7 @@ public class ConsultationController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
+    /*
     @PutMapping
     public ResponseEntity<Consultation> update(@Valid @RequestBody Consultation consultation){
         consultationService.update(consultation);
@@ -64,4 +67,6 @@ public class ConsultationController {
         consultationService.delete(id);
         return new ResponseEntity<>(consultation, HttpStatus.OK);
     }
+
+     */
 }
