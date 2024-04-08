@@ -23,7 +23,7 @@ public class Consultation {
     @Column(name = "consultation_date", nullable = false)
     private LocalDateTime consultationDate;
     @OneToMany(mappedBy = "consultation", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-    CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<DetailConsultation> detailConsultations;
     public Long getId() {
         return id;
