@@ -1,7 +1,5 @@
 package com.hegaro.medicalapp.controller;
 
-import com.hegaro.medicalapp.exception.ModelNotFoundException;
-import com.hegaro.medicalapp.model.Consultation;
 import com.hegaro.medicalapp.service.ConsultationService;
 import com.hegaro.medicalapp.service.dto.request.ConsultationRequest;
 import com.hegaro.medicalapp.service.dto.response.ConsultationResponse;
@@ -28,20 +26,18 @@ public class ConsultationController {
     public ConsultationController(ConsultationService consultationService) {
         this.consultationService = consultationService;
     }
-/*
+
     @GetMapping
-    public ResponseEntity<List<Consultation>> findAll(){
+    public ResponseEntity<List<ConsultationResponse>> findAll(){
         var consultations = consultationService.findAll();
         return new ResponseEntity<>(consultations, HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Consultation> findById(@PathVariable("id") Integer id){
-        var consultation = consultationService.findById(id);
-        if(consultation == null){
-            throw new ModelNotFoundException("No se encuentra una consulta con ID : " + id);
-        }
-        return new ResponseEntity<>(consultation, HttpStatus.OK);
-    } */
+    public ResponseEntity<ConsultationResponse> findById(@PathVariable("id") Long id) {
+        ConsultationResponse consultationResponse = consultationService.findById(id);
+        return new ResponseEntity<>(consultationResponse, HttpStatus.OK);
+    }
     @PostMapping
     public ResponseEntity<ConsultationResponse> register(@Valid @RequestBody ConsultationRequest consultationRequest){
         var consultationCreated = consultationService.register(consultationRequest);
@@ -52,21 +48,14 @@ public class ConsultationController {
                 .toUri();
         return ResponseEntity.created(location).build();
     }
-    /*
-    @PutMapping
-    public ResponseEntity<Consultation> update(@Valid @RequestBody Consultation consultation){
-        consultationService.update(consultation);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<ConsultationResponse> update(@PathVariable("id") Long id, @Valid @RequestBody ConsultationRequest consultationRequest){
+        ConsultationResponse consultationResponse = consultationService.update(id, consultationRequest);
+        return new ResponseEntity<>(consultationResponse, HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Consultation> delete(@PathVariable("id") Integer id){
-        var consultation = consultationService.findById(id);
-        if(consultation == null){
-            throw new ModelNotFoundException("No se encuentra un consultation con ID : " + id);
-        }
+    public ResponseEntity<ConsultationResponse> delete(@PathVariable("id") Long id){
         consultationService.delete(id);
-        return new ResponseEntity<>(consultation, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
-
-     */
 }
