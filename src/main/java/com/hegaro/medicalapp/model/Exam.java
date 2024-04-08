@@ -1,6 +1,9 @@
 package com.hegaro.medicalapp.model;
 
 import jakarta.persistence.*;
+
+import java.util.Objects;
+
 @Entity
 public class Exam {
     @Id
@@ -42,5 +45,17 @@ public class Exam {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Exam exam)) return false;
+        return Objects.equals(getId(), exam.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

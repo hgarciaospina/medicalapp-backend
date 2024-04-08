@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+
 @Entity
 public class Consultation {
     @Id
@@ -67,5 +69,17 @@ public class Consultation {
     }
     public void setDetailConsultations(List<DetailConsultation> detailConsultations) {
         this.detailConsultations = detailConsultations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Consultation that)) return false;
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
