@@ -3,15 +3,16 @@ package com.hegaro.medicalapp.service.impl;
 import com.hegaro.medicalapp.exception.BadArgumentException;
 import com.hegaro.medicalapp.exception.ModelNotFoundException;
 import com.hegaro.medicalapp.model.*;
-import com.hegaro.medicalapp.repository.ConsultationRepository;
-import com.hegaro.medicalapp.repository.DoctorRepository;
-import com.hegaro.medicalapp.repository.PatientRepository;
-import com.hegaro.medicalapp.repository.SpecialtyRepository;
+import com.hegaro.medicalapp.repository.*;
 import com.hegaro.medicalapp.service.ConsultationService;
+import com.hegaro.medicalapp.service.dto.request.ConsultationExamRequest;
 import com.hegaro.medicalapp.service.dto.request.ConsultationRequest;
 import com.hegaro.medicalapp.service.dto.request.DetailConsultationsRequest;
+import com.hegaro.medicalapp.service.dto.request.ExamIdsRequest;
+import com.hegaro.medicalapp.service.dto.response.ConsultationExamResponse;
 import com.hegaro.medicalapp.service.dto.response.ConsultationResponse;
 import com.hegaro.medicalapp.service.dto.response.DetailConsultationResponse;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -29,22 +30,30 @@ public class ConsultationServiceImpl implements ConsultationService {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final SpecialtyRepository specialtyRepository;
+    private final ExamRepository examRepository;
+    private final ConsultationExamRepository consultationExamRepository;
     private final ModelMapper modelMapper;
     private static final Logger LOGGER = Logger.getLogger(ConsultationServiceImpl.class.getName());
     public static final String PATIENT_NOT_FOUND_MESSAGE = "No se encuentra un paciente registrado con el ID : ";
     public static final String DOCTOR_NOT_FOUND_MESSAGE = "No se encuentra un doctor registrado con el ID : ";
     public static final String SPECIALTY_NOT_FOUND_MESSAGE = "No se encuentra una especialidad registrada con el ID : " ;
+    public static final String EXAM_NOT_FOUND_MESSAGE = "No se encuentra un examen registrada con el ID : ";
     public static final String CONSULTATION_NOT_FOUND_MESSAGE  = "No se encuentra una consulta registrada con el ID : " ;
+    public static final String DETAIL_CONSULTATIONS_NOT_FOUND_MESSAGE = "Debe registrar los detalles de la consulta de diagnóstico y tratamiento";
 
     public ConsultationServiceImpl(ConsultationRepository consultationRepository,
                                    PatientRepository patientRepository,
                                    DoctorRepository doctorRepository,
                                    SpecialtyRepository specialtyRepository,
+                                   ConsultationExamRepository consultationExamRepository,
+                                   ExamRepository examRepository,
                                    ModelMapper modelMapper) {
         this.consultationRepository = consultationRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.specialtyRepository = specialtyRepository;
+        this.consultationExamRepository = consultationExamRepository;
+        this.examRepository = examRepository;
         this.modelMapper = modelMapper;
     }
     @Override
@@ -65,7 +74,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         }
 
         if(consultationRequest.getDetailConsultationsRequest().isEmpty()){
-            throw new ModelNotFoundException("Debe registrar los detalles de la consulta de diagnóstico y tratamiento");
+            throw new ModelNotFoundException(DETAIL_CONSULTATIONS_NOT_FOUND_MESSAGE);
         }
 
         Consultation newConsultation = new Consultation();
@@ -86,6 +95,63 @@ public class ConsultationServiceImpl implements ConsultationService {
         Consultation consultation = consultationRepository.save(newConsultation);
         return modelMapper.map(consultation, ConsultationResponse.class);
     }
+
+    @Transactional
+    @Override
+    public ConsultationExamResponse registerTransactional(ConsultationExamRequest consultationExamRequest) {
+        Optional<Patient> optPatient = patientRepository.findById(consultationExamRequest.getConsultationRequest().getPatientId());
+        if(optPatient.isEmpty()){
+            throw new ModelNotFoundException(PATIENT_NOT_FOUND_MESSAGE + consultationExamRequest.getConsultationRequest().getPatientId());
+        }
+
+        Optional<Doctor> optDoctor = doctorRepository.findById(consultationExamRequest.getConsultationRequest().getDoctorId());
+        if(optDoctor.isEmpty()){
+            throw new ModelNotFoundException(DOCTOR_NOT_FOUND_MESSAGE + consultationExamRequest.getConsultationRequest().getDoctorId());
+        }
+
+        Optional<Specialty>  optSpecialty = specialtyRepository.findById(consultationExamRequest.getConsultationRequest().getSpecialtyId());
+        if(optSpecialty.isEmpty()){
+            throw new ModelNotFoundException(SPECIALTY_NOT_FOUND_MESSAGE + consultationExamRequest.getConsultationRequest().getSpecialtyId());
+        }
+
+        if(consultationExamRequest.getConsultationRequest().getDetailConsultationsRequest().isEmpty()){
+            throw new ModelNotFoundException(DETAIL_CONSULTATIONS_NOT_FOUND_MESSAGE);
+        }
+
+        Consultation newConsultation = new Consultation();
+        newConsultation.setPatient(modelMapper.map(optPatient, Patient.class));
+        newConsultation.setDoctor(modelMapper.map(optDoctor, Doctor.class));
+        newConsultation.setSpecialty(modelMapper.map(optSpecialty, Specialty.class));
+        newConsultation.setConsultationDate(consultationExamRequest.getConsultationRequest().getConsultationDate());
+        List<DetailConsultation> detailConsultationEntityList = new LinkedList<>();
+        for (DetailConsultationsRequest detailConsultationRequest: consultationExamRequest.getConsultationRequest().getDetailConsultationsRequest()) {
+            DetailConsultation detailConsultationEntity = new DetailConsultation();
+            detailConsultationEntity.setConsultation(newConsultation);
+            detailConsultationEntity.setDiagnostic(detailConsultationRequest.getDiagnostic());
+            detailConsultationEntity.setTreatment(detailConsultationRequest.getTreatment());
+            detailConsultationEntityList.add(detailConsultationEntity);
+        }
+
+        newConsultation.setDetailConsultations(detailConsultationEntityList);
+        Consultation consultation = consultationRepository.save(newConsultation);
+
+        var examIdsList =  consultationExamRequest.getExamIdsRequest();
+        if(!examIdsList.isEmpty()) {
+            for(ExamIdsRequest examIdsRequest: examIdsList) {
+                Optional<Exam>  optExam = examRepository.findById(examIdsRequest.getExamId());
+                if(optExam.isEmpty()){
+                    throw new ModelNotFoundException(EXAM_NOT_FOUND_MESSAGE + consultationExamRequest.getConsultationRequest().getSpecialtyId());
+                }
+            }
+
+            for (var examId : examIdsList) {
+                consultationExamRepository.register(consultation.getId(), examId.getExamId());
+            }
+        }
+
+        return modelMapper.map(consultation, ConsultationExamResponse.class);
+    }
+
     @Override
     public ConsultationResponse update(Long id, ConsultationRequest consultationRequest) {
         Optional<Patient> optPatient = patientRepository.findById(consultationRequest.getPatientId());
@@ -104,7 +170,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         }
 
         if(consultationRequest.getDetailConsultationsRequest().isEmpty()){
-            throw new ModelNotFoundException("Debe registrar los detalles de la consulta de diagnóstico y tratamiento");
+            throw new ModelNotFoundException(DETAIL_CONSULTATIONS_NOT_FOUND_MESSAGE);
         }
 
         return consultationRepository.findById(id)

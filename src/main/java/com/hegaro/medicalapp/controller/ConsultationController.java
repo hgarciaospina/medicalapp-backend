@@ -1,7 +1,9 @@
 package com.hegaro.medicalapp.controller;
 
 import com.hegaro.medicalapp.service.ConsultationService;
+import com.hegaro.medicalapp.service.dto.request.ConsultationExamRequest;
 import com.hegaro.medicalapp.service.dto.request.ConsultationRequest;
+import com.hegaro.medicalapp.service.dto.response.ConsultationExamResponse;
 import com.hegaro.medicalapp.service.dto.response.ConsultationResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -39,8 +41,8 @@ public class ConsultationController {
         return new ResponseEntity<>(consultationResponse, HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<ConsultationResponse> register(@Valid @RequestBody ConsultationRequest consultationRequest){
-        var consultationCreated = consultationService.register(consultationRequest);
+    public ResponseEntity<ConsultationExamResponse> register(@Valid @RequestBody ConsultationExamRequest consultationExamRequest){
+        var consultationCreated = consultationService.registerTransactional(consultationExamRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
